@@ -1,0 +1,18 @@
+{
+    "embedding_type": "PeriodicEmbeddings",
+    "n_bins": 47,
+    "d_embedding": 16,
+    "n_blocks": 4,
+    "d_block": 160,
+    "arch_type": "tabm",
+    "lr": 0.0022238652499893,
+    "weight_decay": 0.0004994165115486,
+    "share_training_batches": "F",
+    "Target": "BlendProperty3",
+    "Score": 87.83474650698969,
+    "k": 32,
+    "score": 82.98636104483504,
+    "target_col_name": "BlendProperty3",
+    "seed": 6,
+    "n_splits": 5
+}

@@ -1,0 +1,16 @@
+{
+    "embedding_type": "PiecewiseLinearEmbeddings",
+    "n_bins": 53,
+    "d_embedding": 28,
+    "n_blocks": 2,
+    "d_block": 800,
+    "arch_type": "tabm",
+    "lr": 0.001132595493779876,
+    "weight_decay": 0.0031476819609448934,
+    "share_training_batches": "T",
+    "k": 32,
+    "score": 79.63011737687364,
+    "target_col_name": "BlendProperty3",
+    "seed": 100,
+    "n_splits": 5
+}

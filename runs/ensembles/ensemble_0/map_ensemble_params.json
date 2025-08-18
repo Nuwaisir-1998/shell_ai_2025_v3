@@ -1,0 +1,7 @@
+{
+    "target_col": "BlendProperty1",
+    "oofs":[
+        "cv_run_12_tabm", "ensemble_2", "oof_best_ag"
+    ],
+    "score": "0000"
+}

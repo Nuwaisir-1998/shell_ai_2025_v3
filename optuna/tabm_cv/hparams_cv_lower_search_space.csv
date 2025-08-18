@@ -1,0 +1,3 @@
+,embedding_type,n_bins,d_embedding,n_blocks,d_block,arch_type,lr,weight_decay,share_training_batches,Target,Score,Trial
+0,PeriodicEmbeddings,114,28,2,464,tabm-mini,0.002854129841028066,0.0006374634060510714,F,BlendProperty9,88.37422322377604,200
+0,PeriodicEmbeddings,80,16,2,640,tabm,0.001802683367482119,0.0003142034667726866,T,BlendProperty7,90.03784321135105,200

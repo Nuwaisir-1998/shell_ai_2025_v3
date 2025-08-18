@@ -1,0 +1,16 @@
+{
+    "embedding_type": "PeriodicEmbeddings",
+    "n_bins": 104,
+    "d_embedding": 28,
+    "n_blocks": 2,
+    "d_block": 192,
+    "arch_type": "tabm-mini",
+    "lr": 0.0029193083322159637,
+    "weight_decay": 0.0005295679858737146,
+    "share_training_batches": "T",
+    "k": 32,
+    "score": 74.79073640761843,
+    "target_col_name": "BlendProperty3",
+    "seed": 100,
+    "n_splits": 5
+}
