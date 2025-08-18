@@ -6,3 +6,4 @@ scipy==1.16.1
 streamlit==1.48.1
 torch
 tqdm==4.66.5
+tabm
