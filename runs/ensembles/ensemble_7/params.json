@@ -1,0 +1,16 @@
+{
+    "target_col_name": "BlendProperty1",
+    "score": 98.13409125403041,
+    "ensemble_candidates": [
+        "./Ensemble_oofs/BlendProperty1/cv_run_6_seed:5 (tabm_cv)_score_97.0752102563809.npy",
+        "./Ensemble_oofs/BlendProperty1/cv_run_71_seed:10 (tabm_cv)_score_96.84419542154268.npy",
+        "./Ensemble_oofs/BlendProperty1/cv_run_74_seed:13 (tabm_cv)_score_96.90736445317788.npy",
+        "./Ensemble_oofs/BlendProperty1/cv_run_72_seed:11 (tabm_cv)_score_97.52792788084852.npy",
+        "./Ensemble_oofs/BlendProperty1/ensemble_6_seed:NA (ensembles)_score_98.06167730545704.npy",
+        "./Ensemble_oofs/BlendProperty1/cv_run_1_seed:0 (tabm_cv)_score_96.3108472722416.npy",
+        "./Ensemble_oofs/BlendProperty1/cv_run_5_seed:4 (tabm_cv)_score_96.98159141939932.npy",
+        "./Ensemble_oofs/BlendProperty1/cv_run_73_seed:12 (tabm_cv)_score_97.16756117645173.npy",
+        "./Ensemble_oofs/BlendProperty1/ensemble_1_seed:NA (ensembles)_score_97.75156958314874.npy",
+        "./Ensemble_oofs/BlendProperty1/cv_run_75_seed:14 (tabm_cv)_score_97.21926817612002.npy"
+    ]
+}

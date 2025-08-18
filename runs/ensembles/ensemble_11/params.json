@@ -1,0 +1,16 @@
+{
+    "target_col_name": "BlendProperty5",
+    "score": 99.03667316201638,
+    "ensemble_candidates": [
+        "./Ensemble_oofs/BlendProperty5/run_5_seed:NA (autogluon_best)_score_98.44312431022205.npy",
+        "./Ensemble_oofs/BlendProperty5/cv_run_95_seed:14 (tabm_cv)_score_98.7359636671396.npy",
+        "./Ensemble_oofs/BlendProperty5/cv_run_35_seed:6 (tabm_cv)_score_98.56881944001132.npy",
+        "./Ensemble_oofs/BlendProperty5/cv_run_91_seed:10 (tabm_cv)_score_98.79706683819984.npy",
+        "./Ensemble_oofs/BlendProperty5/cv_run_92_seed:11 (tabm_cv)_score_98.78924910255516.npy",
+        "./Ensemble_oofs/BlendProperty5/ensemble_5_seed:NA (ensembles)_score_98.89177193626654.npy",
+        "./Ensemble_oofs/BlendProperty5/cv_run_29_seed:0 (tabm_cv)_score_98.76782273600088.npy",
+        "./Ensemble_oofs/BlendProperty5/cv_run_93_seed:12 (tabm_cv)_score_98.7678421866602.npy",
+        "./Ensemble_oofs/BlendProperty5/cv_run_94_seed:13 (tabm_cv)_score_98.60394744821345.npy",
+        "./Ensemble_oofs/BlendProperty5/cv_run_32_seed:3 (tabm_cv)_score_98.54290104811552.npy"
+    ]
+}

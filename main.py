@@ -139,7 +139,7 @@ with st.expander('TabM (Gorishniy et al., ICML (2025)', expanded=True):
     
     df_cv_score = pd.DataFrame()
     for target_col in selected_target_cols:
-        runs = load_cv_runs(['./runs/tabm_cv'], target_col=target_col)
+        runs = load_cv_runs(['./runs/tabm_cv', './runs/ensembles'], target_col=target_col)
         
         if len(runs) > 0:
             df = pd.DataFrame(runs).sort_values(by="score", ascending=False)
