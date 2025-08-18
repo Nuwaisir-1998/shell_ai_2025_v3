@@ -43,6 +43,8 @@ def load_cv_runs(base_dirs, target_col):
                 })
     return runs
 
+'View the CV scores and the parameters used for each run:'
+
 with st.expander('TabM'):
     # Load runs
     for target_col in st.session_state['selected_target_cols']:

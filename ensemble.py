@@ -103,7 +103,7 @@ st.session_state['n_top'] = n_top
 if os.path.exists('./Ensemble_oofs'):
     shutil.rmtree('./Ensemble_oofs')
     
-if st.button('Ensemble'):
+if st.button('Ensemble', help='Ensembles top scorer oof predictions'):
     for target_col in st.session_state['selected_target_cols']:
         runs = load_cv_runs(base_dirs=BASE_DIRS, target_col=target_col)
 

@@ -15,7 +15,7 @@ import json
 from my_tabm import apply_tabm_cv, apply_tabm_cv_tune
 
 st.set_page_config(
-    page_title="Shell.ai 25",
+    page_title="Shell.ai 25 by Analytic-BD",
     layout="wide"  # This enables wide mode
 )
 
@@ -54,6 +54,7 @@ def load_cv_runs(base_dirs, target_col):
                     "score": score,
                     "params": params,
                     "oof_preds": np.load(os.path.join(run_path, 'df_oof_preds.npy')),
+                    "method": method_name
                 })
     return runs
 
@@ -136,7 +137,7 @@ with st.expander('TabM (Gorishniy et al., ICML (2025)', expanded=True):
     # st.header('TabM')
     # 'CV scores:'
     hparams_all = pd.read_csv("./optuna/tabm_cv/hparams_cv.csv", index_col=0)
-    
+    'Best Scores:'
     df_cv_score = pd.DataFrame()
     for target_col in selected_target_cols:
         runs = load_cv_runs(['./runs/tabm_cv', './runs/ensembles'], target_col=target_col)
@@ -145,6 +146,11 @@ with st.expander('TabM (Gorishniy et al., ICML (2025)', expanded=True):
             df = pd.DataFrame(runs).sort_values(by="score", ascending=False)
             df_cv_score['BP'+target_col.split('BlendProperty')[-1]] = [df['score'].values[0]]
             # df['params'].iloc[0]
+            # df.iloc[0]['params']
+            
+            df = pd.DataFrame(runs)
+            df = df[df['method'] == 'tabm_cv']
+            df = df.sort_values(by="score", ascending=False)
             # df.iloc[0]['params']
             best_hparams = df.iloc[0]['params']
             # best_hparams

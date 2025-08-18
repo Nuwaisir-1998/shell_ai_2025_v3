@@ -10,7 +10,7 @@ st.set_page_config(
 
 df = st.session_state['df_test']
 
-uploaded_file = st.file_uploader("Upload your test.csv")
+uploaded_file = st.file_uploader("Upload your test.csv (competition data uploaded by default)")
 
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
