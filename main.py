@@ -132,12 +132,13 @@ st.session_state['selected_target_cols_temp'] = selected_target_cols
 st.session_state['selected_target_cols'] = selected_target_cols
 
 with st.expander('TabM (Gorishniy et al., ICML (2025)', expanded=True):
+    st.markdown("[TabM paper.](https://arxiv.org/pdf/2410.24210)")
     # with st.container(height=420):
     cur_model = 'tabm'
     # st.header('TabM')
     # 'CV scores:'
     hparams_all = pd.read_csv("./optuna/tabm_cv/hparams_cv.csv", index_col=0)
-    'Best Scores:'
+    'Best CV Scores (OOF predictions):'
     df_cv_score = pd.DataFrame()
     for target_col in selected_target_cols:
         runs = load_cv_runs(['./runs/tabm_cv', './runs/ensembles'], target_col=target_col)
