@@ -6,7 +6,7 @@ import time
 import subprocess
 import sys
 import optuna
-# from optuna.samplers import TPESampler
+from optuna.samplers import TPESampler
 from tqdm import tqdm
 import os
 from glob import glob
@@ -127,6 +127,11 @@ selected_target_cols = st.multiselect(
     options,
     default=st.session_state['selected_target_cols_temp'],
 )
+
+if 'hparam_ranges' not in st.session_state:
+    st.session_state['hparam_ranges'] = {}
+        
+# selected_targets_checkbox
 
 st.session_state['selected_target_cols_temp'] = selected_target_cols
 st.session_state['selected_target_cols'] = selected_target_cols
@@ -250,15 +255,122 @@ with st.expander('TabM (Gorishniy et al., ICML (2025)', expanded=True):
                     score, _, _ = apply_tabm_cv(hparams, df_train, df_test_pred, feature_cols, target_col, seed=seed, n_splits=n_splits, callback=update_progress)
                     score
         
+    '##### Tune Hyperparameters'
+    with st.expander("Set Hyperparameter Tuning Ranges", expanded=False):
+
+        # n_trials (Optuna)
+        n_trials = st.number_input("Number of Optuna trials (n_trials)", min_value=1, value=100, step=10, key="n_trials")
+
+        # n_bins
+        c1, c2 = st.columns(2)
+        with c1:
+            n_bins_min = st.number_input("n_bins (min)", min_value=1, value=2, key="n_bins_min")
+        with c2:
+            n_bins_max = st.number_input("n_bins (max)", min_value=n_bins_min, value=128, key="n_bins_max")
+
+        # d_embedding
+        c1, c2, c3 = st.columns([1, 1, 1])
+        with c1:
+            d_embedding_min = st.number_input("d_embedding (min)", min_value=1, value=8, key="d_embedding_min")
+        with c2:
+            d_embedding_max = st.number_input("d_embedding (max)", min_value=d_embedding_min, value=32, key="d_embedding_max")
+        with c3:
+            d_embedding_step = st.number_input("step", min_value=1, value=4, key="d_embedding_step")
+
+        # n_blocks
+        c1, c2 = st.columns(2)
+        with c1:
+            n_blocks_min = st.number_input("n_blocks (min)", min_value=1, value=1, key="n_blocks_min")
+        with c2:
+            n_blocks_max = st.number_input("n_blocks (max)", min_value=n_blocks_min, value=4, key="n_blocks_max")
+
+        # d_block
+        c1, c2, c3 = st.columns([1, 1, 1])
+        with c1:
+            d_block_min = st.number_input("d_block (min)", min_value=1, value=64, key="d_block_min")
+        with c2:
+            d_block_max = st.number_input("d_block (max)", min_value=d_block_min, value=1024, key="d_block_max")
+        with c3:
+            d_block_step = st.number_input("step", min_value=1, value=16, key="d_block_step")
+
+        # embedding_type (categorical)
+        c1, c2 = st.columns(2)
+        with c1:
+            embedding_type = st.multiselect(
+                "embedding_type options", 
+                ["PeriodicEmbeddings", "PiecewiseLinearEmbeddings"],
+                default=["PeriodicEmbeddings"]
+            )
+        with c2:
+            arch_type = st.multiselect(
+                "arch_type options", 
+                ["tabm", "tabm-mini"],
+                default=["tabm"]
+            )
+
+        # lr
+        c1, c2 = st.columns(2)
+        with c1:
+            lr_min = st.number_input("lr (min)", min_value=1e-6, value=1e-4, format="%.1e", key="lr_min")
+        with c2:
+            lr_max = st.number_input("lr (max)", min_value=lr_min, value=5e-3, format="%.1e", key="lr_max")
+        lr_log = st.checkbox("Log scale for lr", value=True, key="lr_log")
+
+        # weight_decay
+        c1, c2 = st.columns(2)
+        with c1:
+            wd_min = st.number_input("weight_decay (min)", min_value=1e-6, value=1e-4, format="%.1e", key="wd_min")
+        with c2:
+            wd_max = st.number_input("weight_decay (max)", min_value=wd_min, value=1e-1, format="%.1e", key="wd_max")
+        wd_log = st.checkbox("Log scale for weight_decay", value=True, key="wd_log")
+
+        # share_training_batches
+        share_training_batches = st.multiselect(
+            "share_training_batches options",
+            ["T", "F"],
+            default=["T", "F"],
+            key="share_training_batches"
+        )
     
+    hparam_ranges = {
+        "n_bins": (n_bins_min, n_bins_max),
+        "d_embedding": (d_embedding_min, d_embedding_max, d_embedding_step),
+        "n_blocks": (n_blocks_min, n_blocks_max),
+        "d_block": (d_block_min, d_block_max, d_block_step),
+        "embedding_type": embedding_type,
+        "arch_type": arch_type,
+        "lr": (lr_min, lr_max, {"log": lr_log}),
+        "weight_decay": (wd_min, wd_max, {"log": wd_log}),
+        "share_training_batches": share_training_batches,
+        "n_trials": n_trials,
+    }
     
-    col_seed_lower, col_seed_lower_input, col_seed_upper, col_seed_upper_input, col_tuner_splits, col_tuner_splits_input, col_n_trials, col_n_trials_input, col_tune_hyperparameters = st.columns([1, 1, 1, 1, 1, 1, 1, 1, 3])
+    st.session_state['hparam_ranges'] = hparam_ranges
+
+        
+
+    # st.write("### Current Hyperparameters")
+    # st.json({
+    #     "n_bins": (n_bins_min, n_bins_max),
+    #     "d_embedding": (d_embedding_min, d_embedding_max, d_embedding_step),
+    #     "n_blocks": (n_blocks_min, n_blocks_max),
+    #     "d_block": (d_block_min, d_block_max, d_block_step),
+    #     "embedding_type": embedding_type,
+    #     "arch_type": arch_type,
+    #     "lr": (lr_min, lr_max, {"log": lr_log}),
+    #     "weight_decay": (wd_min, wd_max, {"log": wd_log}),
+    #     "share_training_batches": share_training_batches,
+    #     "n_trials": n_trials,
+    # })
+    
+    col_seed_lower, col_seed_lower_input, col_seed_upper, col_seed_upper_input, col_tuner_splits, col_tuner_splits_input, col_tune_hyperparameters = st.columns([1, 1, 1, 1, 1, 1, 5])
     
     with col_tune_hyperparameters:
         df_best_hparams = None
         if st.button('Tune Hyperparameters', use_container_width=True):
             
-            n_trials = int(st.session_state['tabm']['n_trials'])
+            # n_trials = int(st.session_state['tabm']['n_trials'])
+            n_trials = int(hparam_ranges['n_trials'])
             tuner_splits = int(st.session_state['tabm']['tuner_splits'])
             seed_lower = int(st.session_state['tabm']['seed_lower'])
             seed_upper = int(st.session_state['tabm']['seed_upper'])
@@ -266,7 +378,7 @@ with st.expander('TabM (Gorishniy et al., ICML (2025)', expanded=True):
             for seed in range(seed_lower, seed_upper + 1):
                 for target_col in selected_target_cols:
                     def objective(trial):
-                        score = apply_tabm_cv_tune(trial, df_train, df_test_pred, feature_cols, target_col, seed=100, n_splits=tuner_splits)
+                        score = apply_tabm_cv_tune(trial, df_train, df_test_pred, feature_cols, target_col, seed=100, n_splits=tuner_splits, hparam_ranges=hparam_ranges)
                         return score
                     
                     progress_bar = st.sidebar.progress(0)
@@ -277,7 +389,7 @@ with st.expander('TabM (Gorishniy et al., ICML (2025)', expanded=True):
                         progress_bar.progress(completed / n_trials)
                         status_text.text(f"Running trial {completed}/{n_trials}")
 
-                    study = optuna.create_study(sampler=optuna.TPESampler(), direction='maximize')
+                    study = optuna.create_study(sampler=TPESampler(), direction='maximize')
                     study.optimize(objective, n_trials=n_trials, callbacks=[streamlit_callback])
                     status_text.text("✅ Done!")
                     st.write("Best trial:", study.best_trial.params)
@@ -322,17 +434,19 @@ with st.expander('TabM (Gorishniy et al., ICML (2025)', expanded=True):
                         )
         st.session_state['tabm']['seed_upper'] = seed_upper
     
-    with col_n_trials:
-        '\# of trials:'
+    # with col_set_hparam_ranges:
+        
+    # with col_n_trials:
+    #     '\# of trials:'
     
-    with col_n_trials_input:
-        n_trials = st.text_input(
-                            label='',
-                            value=100,  # default = best
-                            key=f'tabm_n_trials',
-                            label_visibility="collapsed",
-                        )
-        st.session_state['tabm']['n_trials'] = n_trials
+    # with col_n_trials_input:
+    #     n_trials = st.text_input(
+    #                         label='',
+    #                         value=100,  # default = best
+    #                         key=f'tabm_n_trials',
+    #                         label_visibility="collapsed",
+    #                     )
+    #     st.session_state['tabm']['n_trials'] = n_trials
     
     with col_tuner_splits:
         'CV Splits:' 
@@ -347,6 +461,7 @@ with st.expander('TabM (Gorishniy et al., ICML (2025)', expanded=True):
         st.session_state['tabm']['tuner_splits'] = tuner_splits
    
     
+
     
         
     with st.sidebar:
@@ -422,7 +537,22 @@ if "status_text_run_tabm" not in st.session_state:
 #     if st.button('Run'):
 #         # from autogluon.tabular import TabularPredictor
 #         from tqdm import tqdm
-    
+
+
+
+# st.write("### Current Hyperparameters")
+# st.json({
+#     "n_bins": (n_bins_min, n_bins_max),
+#     "d_embedding": (d_embedding_min, d_embedding_max, d_embedding_step),
+#     "n_blocks": (n_blocks_min, n_blocks_max),
+#     "d_block": (d_block_min, d_block_max, d_block_step),
+#     "embedding_type": embedding_type,
+#     "arch_type": arch_type,
+#     "lr": (lr_min, lr_max, {"log": lr_log}),
+#     "weight_decay": (wd_min, wd_max, {"log": wd_log}),
+#     "share_training_batches": share_training_batches,
+#     "n_trials": n_trials,
+# })
     
                     
             

@@ -571,23 +571,34 @@ def apply_tabm_cv(hparams, df_train, df_test_pred, feature_cols, col_name, seed=
     return score, df_oof_preds, test_preds_avg
 
 
-def apply_tabm_cv_tune(trial, df_train, df_test_pred, feature_cols, target_col, seed=42, n_splits=5):
+def apply_tabm_cv_tune(trial, df_train, df_test_pred, feature_cols, target_col, seed=42, n_splits=5, hparam_ranges={}):
         
     kf = KFold(n_splits=n_splits, shuffle=True, random_state=seed)
     col_name = target_col
     df_oof_preds = df_train[[col_name]].copy()
     
     hparams = {}
-    hparams['embedding_type'] = trial.suggest_categorical('embedding_type', ['PeriodicEmbeddings', 'PiecewiseLinearEmbeddings'])
-    hparams['n_bins'] = trial.suggest_int('n_bins', 2, 128) # prev 48
-    hparams['d_embedding'] = trial.suggest_int('d_embedding', 8, 32, step=4) # prev 16
-    hparams['n_blocks'] = trial.suggest_int("n_blocks", 1, 4)
-    hparams['d_block'] = trial.suggest_int("d_block", 64, 1024, step=16)
-    hparams['arch_type'] = trial.suggest_categorical('arch_type', ['tabm', 'tabm-mini'])
-    hparams['lr'] = trial.suggest_float("lr", 1e-4, 5e-3, log=True)
-    hparams['weight_decay'] = trial.suggest_float("weight_decay", 1e-4, 1e-1, log=True)
-    hparams['share_training_batches'] = trial.suggest_categorical('share_training_batches', ['T', 'F'])
+    hparams['embedding_type'] = trial.suggest_categorical('embedding_type', hparam_ranges['embedding_type'])
+    hparams['n_bins'] = trial.suggest_int('n_bins', hparam_ranges['n_bins'][0], hparam_ranges['n_bins'][1]) # prev 48
+    hparams['d_embedding'] = trial.suggest_int('d_embedding', hparam_ranges['d_embedding'][0], hparam_ranges['d_embedding'][1], step=hparam_ranges['d_embedding'][2]) # prev 16
+    hparams['n_blocks'] = trial.suggest_int("n_blocks", hparam_ranges['n_blocks'][0], hparam_ranges['n_blocks'][0])
+    hparams['d_block'] = trial.suggest_int("d_block", hparam_ranges['d_block'][0], hparam_ranges['d_block'][1], step=hparam_ranges['d_block'][2])
+    hparams['arch_type'] = trial.suggest_categorical('arch_type', hparam_ranges['arch_type'])
+    hparams['lr'] = trial.suggest_float("lr", hparam_ranges['lr'][0], hparam_ranges['lr'][1], log=True)
+    hparams['weight_decay'] = trial.suggest_float("weight_decay", hparam_ranges['weight_decay'][0], hparam_ranges['weight_decay'][1], log=True)
+    hparams['share_training_batches'] = trial.suggest_categorical('share_training_batches', hparam_ranges['share_training_batches'])
     hparams['k'] = 32
+    
+    # hparams['embedding_type'] = trial.suggest_categorical('embedding_type', ['PeriodicEmbeddings', 'PiecewiseLinearEmbeddings'])
+    # hparams['n_bins'] = trial.suggest_int('n_bins', 2, 128) # prev 48
+    # hparams['d_embedding'] = trial.suggest_int('d_embedding', 8, 32, step=4) # prev 16
+    # hparams['n_blocks'] = trial.suggest_int("n_blocks", 1, 4)
+    # hparams['d_block'] = trial.suggest_int("d_block", 64, 1024, step=16)
+    # hparams['arch_type'] = trial.suggest_categorical('arch_type', ['tabm', 'tabm-mini'])
+    # hparams['lr'] = trial.suggest_float("lr", 1e-4, 5e-3, log=True)
+    # hparams['weight_decay'] = trial.suggest_float("weight_decay", 1e-4, 1e-1, log=True)
+    # hparams['share_training_batches'] = trial.suggest_categorical('share_training_batches', ['T', 'F'])
+    # hparams['k'] = 32
     
     
     all_run_dirs = glob(f'./runs/tabm_cv/cv_run*')
