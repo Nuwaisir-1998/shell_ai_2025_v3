@@ -134,7 +134,10 @@ if 'hparam_ranges' not in st.session_state:
 st.session_state['selected_target_cols'] = selected_target_cols
 
 with st.expander('TabM (Gorishniy et al., ICML (2025)', expanded=True):
+    "TabM is a tabular deep learning (DL) MLP-based architecture which relies on efficient ensembling of simultaneously trained MLPs which share most of their weights by default. It demonstrates the best performance among tabular DL models."
     st.markdown("[TabM paper.](https://arxiv.org/pdf/2410.24210)")
+    with st.expander('Pipeline'):
+        st.image('./pipeline.png')
     # with st.container(height=420):
     cur_model = 'tabm'
     # st.header('TabM')

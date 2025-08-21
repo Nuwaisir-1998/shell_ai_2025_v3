@@ -93,6 +93,9 @@ def load_cv_runs(base_dirs, target_col):
                 })
     return runs
 
+st.image("ensemble_process.png", caption="Ensemble process", use_column_width=True)
+
+
 
 BASE_DIRS = ["./runs/tabm_cv", "./runs/autogluon_best", "./runs/ensembles"]
 
