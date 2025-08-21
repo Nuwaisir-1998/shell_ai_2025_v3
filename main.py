@@ -367,7 +367,7 @@ with st.expander('TabM (Gorishniy et al., ICML (2025)', expanded=True):
     
     with col_tune_hyperparameters:
         df_best_hparams = None
-        if st.button('Tune Hyperparameters', use_container_width=True):
+        if st.button('Start tuning', use_container_width=True, help='Optuna TPESampler is used for sampling hyperparameters on each trial.'):
             
             # n_trials = int(st.session_state['tabm']['n_trials'])
             n_trials = int(hparam_ranges['n_trials'])
