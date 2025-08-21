@@ -115,17 +115,15 @@ for model in models:
 options = target_cols
 
 if 'selected_target_cols' not in st.session_state:
-    st.session_state['selected_target_cols'] = None
+    st.session_state['selected_target_cols'] = target_cols
 else:
     selected_target_cols = st.session_state.selected_target_cols
     
-if 'selected_target_cols_temp' not in st.session_state:
-    st.session_state['selected_target_cols_temp'] = []
 
 selected_target_cols = st.multiselect(
-    "Select one or more target labels to predict:",
+    "Target labels to predict:",
     options,
-    default=st.session_state['selected_target_cols_temp'],
+    default=st.session_state['selected_target_cols'],
 )
 
 if 'hparam_ranges' not in st.session_state:
@@ -133,7 +131,6 @@ if 'hparam_ranges' not in st.session_state:
         
 # selected_targets_checkbox
 
-st.session_state['selected_target_cols_temp'] = selected_target_cols
 st.session_state['selected_target_cols'] = selected_target_cols
 
 with st.expander('TabM (Gorishniy et al., ICML (2025)', expanded=True):
@@ -150,7 +147,7 @@ with st.expander('TabM (Gorishniy et al., ICML (2025)', expanded=True):
         
         if len(runs) > 0:
             df = pd.DataFrame(runs).sort_values(by="score", ascending=False)
-            df_cv_score['BP'+target_col.split('BlendProperty')[-1]] = [df['score'].values[0]]
+            df_cv_score['BP'+target_col.split('BlendProperty')[-1]] = [str(df['score'].values[0])]
             # df['params'].iloc[0]
             # df.iloc[0]['params']
             
@@ -163,7 +160,7 @@ with st.expander('TabM (Gorishniy et al., ICML (2025)', expanded=True):
             
         else:
             hparams = hparams_all[hparams_all['Target'] == target_col]
-            df_cv_score['BP'+target_col.split('BlendProperty')[-1]] = hparams['Score']
+            df_cv_score['BP'+target_col.split('BlendProperty')[-1]] = str(hparams['Score'])
             best_hparams = hparams.iloc[0].to_dict()
             "This should not be printed."
             
@@ -299,13 +296,13 @@ with st.expander('TabM (Gorishniy et al., ICML (2025)', expanded=True):
             embedding_type = st.multiselect(
                 "embedding_type options", 
                 ["PeriodicEmbeddings", "PiecewiseLinearEmbeddings"],
-                default=["PeriodicEmbeddings"]
+                default=["PeriodicEmbeddings", "PiecewiseLinearEmbeddings"]
             )
         with c2:
             arch_type = st.multiselect(
                 "arch_type options", 
                 ["tabm", "tabm-mini"],
-                default=["tabm"]
+                default=["tabm", "tabm-mini"]
             )
 
         # lr

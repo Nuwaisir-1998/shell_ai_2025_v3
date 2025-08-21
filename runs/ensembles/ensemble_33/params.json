@@ -1,0 +1,11 @@
+{
+    "target_col_name": "BlendProperty7",
+    "score": 91.1096053820915,
+    "ensemble_candidates": [
+        "./Ensemble_oofs/BlendProperty7/cv_run_103_seed:12 (tabm_cv)_score_90.14502522736922.npy",
+        "./Ensemble_oofs/BlendProperty7/ensemble_23_seed:NA (ensembles)_score_91.09510667505876.npy",
+        "./Ensemble_oofs/BlendProperty7/cv_run_48_seed:5 (tabm_cv)_score_89.08760902418305.npy",
+        "./Ensemble_oofs/BlendProperty7/cv_run_105_seed:14 (tabm_cv)_score_89.63783370190036.npy",
+        "./Ensemble_oofs/BlendProperty7/ensemble_13_seed:NA (ensembles)_score_91.09479701173386.npy"
+    ]
+}
